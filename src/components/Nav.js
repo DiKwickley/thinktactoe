@@ -13,8 +13,6 @@ export const Nav = () => {
   const [user] = useAuthState(auth);
   const router = useRouter();
 
-  console.log(router);
-
   const signInWithGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     const res = await auth.signInWithPopup(provider);

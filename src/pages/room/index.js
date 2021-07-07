@@ -14,7 +14,7 @@ function createRoomID(length = 20) {
   return result;
 }
 
-export default () => {
+export default function Room() {
   const [roomID, setRoomID] = useState(null);
 
   return (
@@ -59,4 +59,4 @@ export default () => {
       </div>
     </Layout>
   );
-};
+}

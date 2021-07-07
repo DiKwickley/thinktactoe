@@ -15,7 +15,7 @@ import {
 import { Board } from "../../components/Board";
 import { PlayeCard } from "../../components/PlayerCard";
 
-export default () => {
+export default function PlayRoom() {
   const [user] = useAuthState(auth);
 
   const router = useRouter();
@@ -38,10 +38,9 @@ export default () => {
     console.log(game);
   }, [game]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (user) {
-      let res = await roomInit(id, user);
-      console.log(res);
+      roomInit(id, user);
     }
   }, [user]);
 
@@ -97,4 +96,4 @@ export default () => {
       </div>
     </Layout>
   );
-};
+}
