@@ -22,19 +22,8 @@ export const Nav = () => {
   };
 
   return (
-    <div className="flex flex-row justify-end">
+    <div className="flex flex-row justify-end m-3">
       {user ? (
-        // <div>
-        //   logged in as {user.displayName}
-        //   <button
-        //     className
-        //     onClick={() => {
-        //       auth.signOut();
-        //     }}
-        //   >
-        //     Signout
-        //   </button>
-        // </div>
         <div
           onClick={() => {
             var res = confirm("Do you want to sign out?");
@@ -42,9 +31,12 @@ export const Nav = () => {
               auth.signOut();
             }
           }}
-          className="flex flex-row items-center justify-center px-3 py-1 m-3 border-2 border-black rounded-lg cursor-pointer"
+          className="flex flex-row items-center justify-center px-3 m-3 border-2 border-black rounded-lg cursor-pointer"
         >
-          <img className="h-[50px] rounded-full  mr-2" src={user.photoURL} />
+          <img
+            className="h-[40px] py-1 rounded-full  mr-2"
+            src={user.photoURL}
+          />
           {user.displayName}
         </div>
       ) : (
@@ -53,7 +45,7 @@ export const Nav = () => {
           className="flex flex-row items-center justify-center pr-3 m-3 border-2 border-black rounded-lg cursor-pointer"
         >
           <img
-            className="h-[50px]"
+            className="h-[40px]"
             src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/google/google.png"
           />
           Google

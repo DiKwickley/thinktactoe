@@ -15,7 +15,7 @@ export function Layout({ children, title = "This is the default title" }) {
         <Nav />
       </div>
 
-      <div className="main">{children}</div>
+      <div className="h-[70vh] main">{children}</div>
       {/* <footer>{"I`m here to stay"}</footer> */}
     </>
   );
