@@ -5,7 +5,7 @@ import "firebase/auth";
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { useCollectionData } from "react-firebase-hooks/firestore";
 
-var firebaseConfig = {
+var config = {
   apiKey: "AIzaSyABfFEQX9xN972lD4yfD-3-VF-eNn2UL00",
   authDomain: "thinktactoe-7b6fe.firebaseapp.com",
   projectId: "thinktactoe-7b6fe",
@@ -15,7 +15,11 @@ var firebaseConfig = {
   measurementId: "G-ZRQD3NT9BM",
 };
 
-firebase.initializeApp(config);
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+} else {
+  firebase.app(); // if already initialized, use that one
+}
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
