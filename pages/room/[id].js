@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { roomInit } from "./../../utils/room";
 import { Layout } from "../../components/Layout";
@@ -8,15 +8,24 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 export default () => {
   const [user] = useAuthState(auth);
+  const [game, setGame] = useState();
 
   const router = useRouter();
   const { id } = router.query;
 
+  const fetchGame = async () => {
+    setGame(await roomInit(id, user));
+  };
+
   useEffect(() => {
     if (user) {
-      roomInit(id, user);
+      fetchGame();
     }
   }, [user]);
+
+  useEffect(() => {
+    console.log(game);
+  }, [game]);
 
   return <Layout> {user ? <div>{id}</div> : "pplease login"}</Layout>;
 };

@@ -5,12 +5,20 @@ import "firebase/auth";
 import { auth } from "./../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+import { userInit } from "./../utils/user";
+
 export const Nav = () => {
   const [user] = useAuthState(auth);
 
-  const signInWithGoogle = () => {
+  const signInWithGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
+    const res = await auth.signInWithPopup(provider);
+
+    if (res.additionalUserInfo.isNewUser) {
+      const { user } = res;
+
+      userInit(user);
+    }
   };
 
   return (
