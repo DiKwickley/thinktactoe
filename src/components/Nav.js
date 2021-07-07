@@ -1,6 +1,8 @@
 import React from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { auth } from "./../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -9,6 +11,9 @@ import { userInit } from "./../../utils/user";
 
 export const Nav = () => {
   const [user] = useAuthState(auth);
+  const router = useRouter();
+
+  console.log(router);
 
   const signInWithGoogle = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -22,7 +27,18 @@ export const Nav = () => {
   };
 
   return (
-    <div className="flex flex-row justify-end m-3">
+    <div
+      className={`flex flex-row justify-end ${
+        router.route !== "/" && "justify-between"
+      } m-3`}
+    >
+      {router.route !== "/" && (
+        <Link href="/">
+          <div className="text-4xl font-extrabold text-transparent cursor-pointer bg-clip-text bg-gradient-to-br from-[#ffe98a] to-[#ff8c8c]">
+            ThinkTacToe
+          </div>
+        </Link>
+      )}
       {user ? (
         <div
           onClick={() => {

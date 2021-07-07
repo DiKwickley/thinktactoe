@@ -6,13 +6,13 @@ import "firebase/auth";
 // import { useCollectionData } from "react-firebase-hooks/firestore";
 
 var config = {
-  apiKey: "AIzaSyABfFEQX9xN972lD4yfD-3-VF-eNn2UL00",
-  authDomain: "thinktactoe-7b6fe.firebaseapp.com",
-  projectId: "thinktactoe-7b6fe",
-  storageBucket: "thinktactoe-7b6fe.appspot.com",
-  messagingSenderId: "30320578734",
-  appId: "1:30320578734:web:aba2d15d292c94b87a5d3f",
-  measurementId: "G-ZRQD3NT9BM",
+  apiKey: process.env.apiKey,
+  authDomain: process.env.authDomain,
+  projectId: process.env.projectId,
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
+  measurementId: process.env.measurementId,
 };
 
 if (!firebase.apps.length) {
