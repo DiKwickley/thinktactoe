@@ -1,7 +1,9 @@
 const Cell = ({ cell, cellIndex, rowIndex, boardOnChange, enable }) => {
   return (
     <button
-      className={`h-[50px] w-[50px] ${
+      className={`h-[50px] w-[50px] font-bold ${
+        cell === "x" && "text-pink-500"
+      } ${cell === "o" && "to-green-500"}  ${
         enable === true ? "border-gray bg-gray-100" : "border-black"
       } border-2 m-1`}
       onClick={() => {
@@ -40,7 +42,7 @@ export const Board = ({ board, turn, boardOnChange, player }) => {
     player,
   });
   return (
-    <div className="text-red-700">
+    <div className="">
       <Row
         row={board.slice(0, 3)}
         rowIndex={0}

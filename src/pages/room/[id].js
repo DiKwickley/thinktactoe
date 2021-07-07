@@ -13,6 +13,7 @@ import {
 } from "react-firebase-hooks/firestore";
 
 import { Board } from "../../components/Board";
+import { PlayeCard } from "../../components/PlayerCard";
 
 export default () => {
   const [user] = useAuthState(auth);
@@ -55,24 +56,45 @@ export default () => {
 
   return (
     <Layout title={`Room | ${id}`}>
-      {user ? (
-        game ? (
-          <div>
-            email: {user.email}
-            <div>id: {id}</div>
-            <Board
-              board={game.board}
-              turn={game.turn}
-              player={user.uid === game.player1.uid ? true : false}
-              boardOnChange={boardOnChange}
-            />
-          </div>
+      <div className="flex flex-col items-center justify-center min-h-full">
+        {user ? (
+          game ? (
+            <div className="flex flex-row items-center justify-center">
+              <div className="self-start">
+                <PlayeCard user={game.player1} number={1} />
+              </div>
+              <div>
+                <Board
+                  board={game.board}
+                  turn={game.turn}
+                  player={user.uid === game.player1.uid ? true : false}
+                  boardOnChange={boardOnChange}
+                />
+                <div className="text-center">
+                  {user.uid === game.player1.uid
+                    ? game.turn
+                      ? "your turn"
+                      : "opponent's turn"
+                    : !game.turn
+                    ? "your turn"
+                    : "opponent's turn"}
+                </div>
+              </div>
+              <div className="self-start">
+                <PlayeCard user={game.player2} number={2} />
+              </div>
+            </div>
+          ) : (
+            <div className=" h-[300px] flex items-center justify-center text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 ">
+              loading...
+            </div>
+          )
         ) : (
-          "loading"
-        )
-      ) : (
-        <div>Please login</div>
-      )}
+          <div className=" h-[300px] flex items-center justify-center text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 ">
+            please login...
+          </div>
+        )}
+      </div>
     </Layout>
   );
 };
