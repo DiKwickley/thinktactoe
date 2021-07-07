@@ -2,10 +2,7 @@ import { firestore } from "./firebase";
 import "firebase/firestore";
 
 export const roomInit = async (roomid, user) => {
-  console.log({ user });
-
   let roomRef = await firestore.collection("rooms");
-  let userRef = await firestore.collection("users");
 
   let room = await roomRef
     .doc(roomid)
@@ -15,10 +12,15 @@ export const roomInit = async (roomid, user) => {
   if (room.exists) {
     let roomData = await room.data();
 
-    if (user.uid != roomData.player1) {
+    if (user.uid !== roomData.player1.uid) {
       roomRef.doc(roomid).set(
         {
-          player2: user.uid,
+          player2: {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          },
         },
         {
           merge: true,
@@ -26,52 +28,23 @@ export const roomInit = async (roomid, user) => {
       );
     }
 
-    room = await roomRef
-      .doc(roomid)
-      .get()
-      .then((doc) => doc);
-
-    roomData = await room.data();
-
-    if (roomData.player1 !== "") {
-      let p1 = await userRef
-        .doc(roomData.player1)
-        .get()
-        .then((doc) => doc);
-
-      roomData.player1 = await p1.data();
-    }
-
-    if (roomData.player2 !== "") {
-      let p2 = await userRef
-        .doc(roomData.player2)
-        .get()
-        .then((doc) => doc);
-
-      roomData.player2 = await p2.data();
-    }
-
-    return roomData;
+    return { sucess: true, msg: "joined a room" };
   } else {
-    roomRef.doc(roomid).set({
-      board: [],
-      player1: user.uid,
-      player2: "",
-    });
-    room = await roomRef
-      .doc(roomid)
-      .get()
-      .then((doc) => doc);
-
-    roomData = await room.data();
-
-    if (roomData.player1 !== "") {
-      let p1 = await userRef
-        .doc(roomData.player1)
-        .get()
-        .then((doc) => doc);
-
-      roomData.player1 = await p1.data();
+    try {
+      roomRef.doc(roomid).set({
+        board: ["", "", "", "", "", "", "", "", ""],
+        player1: {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        },
+        player2: null,
+        turn: true,
+      });
+      return { sucess: true, msg: "created a room" };
+    } catch (err) {
+      return { sucess: false, msg: "some error occured", error: err };
     }
   }
 };
