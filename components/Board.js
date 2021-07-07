@@ -1,13 +1,31 @@
-const Cell = ({ element, index, boardOnChange, enable }) => {
+const Cell = ({ cell, cellIndex, rowIndex, boardOnChange, enable }) => {
   return (
     <button
       onClick={() => {
-        boardOnChange(index);
+        boardOnChange(rowIndex * 3 + cellIndex);
       }}
       disabled={enable}
     >
-      {element}
+      {cell}
     </button>
+  );
+};
+
+const Row = ({ rowIndex, row, boardOnChange, enable }) => {
+  return (
+    <div>
+      {row.map((cell, cellIndex) => {
+        return (
+          <Cell
+            cell={cell}
+            rowIndex={rowIndex}
+            cellIndex={cellIndex}
+            enable={enable}
+            boardOnChange={boardOnChange}
+          />
+        );
+      })}
+    </div>
   );
 };
 
@@ -19,7 +37,7 @@ export const Board = ({ board, turn, boardOnChange, player }) => {
   });
   return (
     <div>
-      {board.map((element, index) => {
+      {/* {board.map((element, index) => {
         return (
           <Cell
             element={element}
@@ -29,7 +47,14 @@ export const Board = ({ board, turn, boardOnChange, player }) => {
             boardOnChange={boardOnChange}
           />
         );
-      })}
+      })} */}
+
+      <Row
+        row={board.slice(0, 3)}
+        rowIndex={0}
+        boardOnChange={boardOnChange}
+        enable={player !== turn}
+      />
     </div>
   );
 };
