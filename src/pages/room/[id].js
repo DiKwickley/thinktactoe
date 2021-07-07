@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { roomInit } from "./../../utils/room";
+import { roomInit } from "./../../../utils/room";
 import { Layout } from "../../components/Layout";
-import { firestore } from "./../../utils/firebase";
+import { firestore } from "./../../../utils/firebase";
 
-import { auth } from "./../../utils/firebase";
+import { auth } from "./../../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
   useCollection,

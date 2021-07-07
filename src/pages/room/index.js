@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { roomInit } from "../../utils/room";
-import { Layout } from "./../../components/Layout";
+import { roomInit } from "../../../utils/room";
+import { Layout } from "../../components/Layout";
 
 function createRoomID(length = 20) {
   var result = "";

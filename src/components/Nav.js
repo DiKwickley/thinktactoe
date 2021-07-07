@@ -2,10 +2,10 @@ import React from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 
-import { auth } from "./../utils/firebase";
+import { auth } from "./../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { userInit } from "./../utils/user";
+import { userInit } from "./../../utils/user";
 
 export const Nav = () => {
   const [user] = useAuthState(auth);

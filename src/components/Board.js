@@ -1,6 +1,9 @@
 const Cell = ({ cell, cellIndex, rowIndex, boardOnChange, enable }) => {
   return (
     <button
+      className={`h-[50px] w-[50px] ${
+        enable === true ? "border-gray bg-gray-100" : "border-black"
+      } border-2 m-1`}
       onClick={() => {
         boardOnChange(rowIndex * 3 + cellIndex);
       }}
@@ -13,7 +16,7 @@ const Cell = ({ cell, cellIndex, rowIndex, boardOnChange, enable }) => {
 
 const Row = ({ rowIndex, row, boardOnChange, enable }) => {
   return (
-    <div>
+    <div className="flex flex-row">
       {row.map((cell, cellIndex) => {
         return (
           <Cell
@@ -22,6 +25,7 @@ const Row = ({ rowIndex, row, boardOnChange, enable }) => {
             cellIndex={cellIndex}
             enable={enable}
             boardOnChange={boardOnChange}
+            key={cellIndex}
           />
         );
       })}
@@ -36,22 +40,22 @@ export const Board = ({ board, turn, boardOnChange, player }) => {
     player,
   });
   return (
-    <div>
-      {/* {board.map((element, index) => {
-        return (
-          <Cell
-            element={element}
-            index={index}
-            key={index}
-            enable={player !== turn}
-            boardOnChange={boardOnChange}
-          />
-        );
-      })} */}
-
+    <div className="text-red-700">
       <Row
         row={board.slice(0, 3)}
         rowIndex={0}
+        boardOnChange={boardOnChange}
+        enable={player !== turn}
+      />
+      <Row
+        row={board.slice(3, 6)}
+        rowIndex={1}
+        boardOnChange={boardOnChange}
+        enable={player !== turn}
+      />
+      <Row
+        row={board.slice(6, 9)}
+        rowIndex={2}
         boardOnChange={boardOnChange}
         enable={player !== turn}
       />
