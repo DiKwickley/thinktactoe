@@ -141,9 +141,9 @@ export default function PlayRoom() {
               <div className="self-start">
                 <PlayeCard
                   user={
-                    user.uid === game.player2.uid ? game.player1 : game.player2
+                    user.uid !== game.player1.uid ? game.player1 : game.player2
                   }
-                  number={user.uid === game.player2.uid ? 1 : 2}
+                  number={user.uid === game.player1.uid ? 2 : 1}
                 />
               </div>
             </div>
