@@ -48,3 +48,22 @@ export const roomInit = async (roomid, user) => {
     }
   }
 };
+
+export const roomReset = async (roomid) => {
+  let roomRef = await firestore.collection("rooms");
+
+  try {
+    await roomRef.doc(roomid).set(
+      {
+        board: ["", "", "", "", "", "", "", "", ""],
+        turn: true,
+      },
+      {
+        merge: true,
+      }
+    );
+    return { sucess: true, msg: "room reset" };
+  } catch (err) {
+    return { sucess: false, msg: "some error occured", error: err };
+  }
+};
