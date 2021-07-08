@@ -36,11 +36,11 @@ const Row = ({ rowIndex, row, boardOnChange, enable }) => {
 };
 
 export const Board = ({ board, turn, boardOnChange, player }) => {
-  console.log({
-    board,
-    turn,
-    player,
-  });
+  // console.log({
+  //   board,
+  //   turn,
+  //   player,
+  // });
   return (
     <div className="">
       <Row

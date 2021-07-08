@@ -31,11 +31,22 @@ export const Nav = () => {
       } m-3`}
     >
       {router.route !== "/" && (
-        <Link href="/">
-          <div className="text-4xl font-extrabold text-transparent cursor-pointer bg-clip-text bg-gradient-to-br from-[#ffe98a] to-[#ff8c8c]">
-            ThinkTacToe
+        <div className="p-3">
+          <div className="block md:hidden">
+            <Link href="/">
+              <div className="text-4xl font-extrabold text-transparent cursor-pointer bg-clip-text bg-gradient-to-br from-[#ffe98a] to-[#ff8c8c]">
+                ttt
+              </div>
+            </Link>
           </div>
-        </Link>
+          <div className="hidden md:block">
+            <Link href="/">
+              <div className="text-4xl font-extrabold text-transparent cursor-pointer bg-clip-text bg-gradient-to-br from-[#ffe98a] to-[#ff8c8c]">
+                ThinkTacToe
+              </div>
+            </Link>
+          </div>
+        </div>
       )}
       {user ? (
         <div

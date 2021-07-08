@@ -18,20 +18,20 @@ export default function Room() {
   const [roomID, setRoomID] = useState(null);
 
   return (
-    <Layout title={"room"}>
+    <Layout title={"Room"}>
       <div className="flex flex-col items-center justify-center min-h-full">
         <div>
           <Link href={`/room/${createRoomID()}`}>
-            <div className="font-extrabold text-transparent cursor-pointer text-9xl bg-clip-text bg-gradient-to-br from-green-400 to-blue-500">
+            <div className="text-5xl font-extrabold text-center text-transparent cursor-pointer md:text-9xl bg-clip-text bg-gradient-to-br from-green-400 to-blue-500">
               Create room
             </div>
           </Link>
         </div>
-        <div className="my-3 text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 ">
+        <div className="my-1 text-2xl font-extrabold text-transparent md:my-3 md:text-6xl bg-clip-text bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 ">
           or
         </div>
         <div>
-          <div className="font-extrabold text-transparent text-9xl bg-clip-text bg-gradient-to-br from-green-400 to-blue-500">
+          <div className="text-5xl font-extrabold text-center text-transparent md:text-9xl bg-clip-text bg-gradient-to-br from-green-400 to-blue-500">
             Join room
           </div>
           <div className="flex flex-col items-center">

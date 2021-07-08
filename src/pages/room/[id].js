@@ -31,13 +31,13 @@ export default function PlayRoom() {
 
   useEffect(() => {
     if (value) {
-      console.log(value.data());
+      // console.log(value.data());
       setGame(value.data());
     }
   }, [value]);
 
   useEffect(() => {
-    console.log(game);
+    // console.log(game);
     if (game) {
       var splitBoard = [
         game.board.slice(0, 3),
@@ -49,7 +49,7 @@ export default function PlayRoom() {
         setGameOver(result);
       }
       clearScore(game);
-      console.log(result);
+      // console.log(result);
     }
   }, [game]);
 
@@ -83,11 +83,16 @@ export default function PlayRoom() {
       <div className="flex flex-col items-center justify-center min-h-full">
         {user ? (
           game ? (
-            <div className="flex flex-row items-center justify-center">
+            <div className="flex flex-col items-center justify-center mt-14 md:flex-row">
               <div className="self-start">
-                <PlayeCard user={game.player1} number={1} />
+                <PlayeCard
+                  user={
+                    user.uid === game.player1.uid ? game.player1 : game.player2
+                  }
+                  number={user.uid === game.player1.uid ? 1 : 2}
+                />
               </div>
-              <div>
+              <div className="my-4">
                 <Board
                   board={game.board}
                   turn={game.turn}
@@ -134,7 +139,12 @@ export default function PlayRoom() {
                 </div>
               </div>
               <div className="self-start">
-                <PlayeCard user={game.player2} number={2} />
+                <PlayeCard
+                  user={
+                    user.uid === game.player2.uid ? game.player1 : game.player2
+                  }
+                  number={user.uid === game.player2.uid ? 1 : 2}
+                />
               </div>
             </div>
           ) : (
