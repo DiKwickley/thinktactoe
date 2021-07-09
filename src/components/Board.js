@@ -28,6 +28,7 @@ const Row = ({ rowIndex, row, boardOnChange, enable }) => {
             enable={enable}
             boardOnChange={boardOnChange}
             key={cellIndex}
+      
           />
         );
       })}
@@ -35,7 +36,7 @@ const Row = ({ rowIndex, row, boardOnChange, enable }) => {
   );
 };
 
-export const Board = ({ board, turn, boardOnChange, player }) => {
+export const Board = ({ board, turn, boardOnChange, player, gameOver }) => {
   // console.log({
   //   board,
   //   turn,
@@ -47,19 +48,19 @@ export const Board = ({ board, turn, boardOnChange, player }) => {
         row={board.slice(0, 3)}
         rowIndex={0}
         boardOnChange={boardOnChange}
-        enable={player !== turn}
+        enable={player !== turn || gameOver}
       />
       <Row
         row={board.slice(3, 6)}
         rowIndex={1}
         boardOnChange={boardOnChange}
-        enable={player !== turn}
+        enable={player !== turn || gameOver}
       />
       <Row
         row={board.slice(6, 9)}
         rowIndex={2}
         boardOnChange={boardOnChange}
-        enable={player !== turn}
+        enable={player !== turn || gameOver}
       />
     </div>
   );
