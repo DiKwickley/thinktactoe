@@ -48,19 +48,19 @@ export const Board = ({ board, turn, boardOnChange, player, gameOver }) => {
         row={board.slice(0, 3)}
         rowIndex={0}
         boardOnChange={boardOnChange}
-        enable={player !== turn || gameOver}
+        enable={player !== turn || gameOver !== false}
       />
       <Row
         row={board.slice(3, 6)}
         rowIndex={1}
         boardOnChange={boardOnChange}
-        enable={player !== turn || gameOver}
+        enable={player !== turn || gameOver !== false}
       />
       <Row
         row={board.slice(6, 9)}
         rowIndex={2}
         boardOnChange={boardOnChange}
-        enable={player !== turn || gameOver}
+        enable={player !== turn || gameOver !== false}
       />
     </div>
   );
