@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { roomInit } from "./../../../utils/room";
 import { roomReset } from "./../../../utils/room";
@@ -7,37 +7,88 @@ import { firestore } from "./../../../utils/firebase";
 import { findWinner } from "./../../../utils/winner";
 import { auth } from "./../../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import {
-  useCollection,
-  useCollectionData,
-  useDocument,
-} from "react-firebase-hooks/firestore";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 import { Board } from "../../components/Board";
 import { PlayeCard } from "../../components/PlayerCard";
 
-export default function PlayRoom() {
-  const [user] = useAuthState(auth);
+export default function PlayRoom(props) {
+  console.log(props.children);
 
+  const [user] = useAuthState(auth);
+  const [peer, setPeer] = useState(null);
   const router = useRouter();
   const { id } = router.query;
 
+  const remoteVideoRef = useRef(null);
+  const currentUserVideoRef = useRef(null);
+  const peerInstance = useRef(null);
+  const callInstance = useRef(null);
+
   const [game, setGame] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+
+  const [call, setCall] = useState(false);
 
   const [value, loading, error] = useDocument(
     firestore.collection("rooms").doc(id)
   );
 
   useEffect(() => {
+    const fn = async () => {
+      const PeerJs = (await import("peerjs")).default;
+    };
+    fn();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const peer = new Peer(user.uid);
+      setPeer(peer);
+
+      peer.on("open", (id) => {
+        console.log({ id });
+      });
+
+      peer.on("call", (call) => {
+        setCall(true);
+        var getUserMedia =
+          navigator.getUserMedia ||
+          navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia;
+
+        getUserMedia({ video: true, audio: true }, async (mediaStream) => {
+          currentUserVideoRef.current.srcObject = await mediaStream;
+          currentUserVideoRef.current.play();
+
+          call.on("close", () => {
+            console.log("Close fired");
+            setCall(false);
+            call.close();
+          });
+
+          call.on("error", (err) => {
+            console.log({ err });
+          });
+
+          call.answer(mediaStream);
+          call.on("stream", function (remoteStream) {
+            remoteVideoRef.current.srcObject = remoteStream;
+            remoteVideoRef.current.play();
+          });
+        });
+      });
+      peerInstance.current = peer;
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (value) {
-      // console.log(value.data());
       setGame(value.data());
     }
   }, [value]);
 
   useEffect(() => {
-    // console.log(game);
     if (game) {
       var splitBoard = [
         game.board.slice(0, 3),
@@ -49,7 +100,6 @@ export default function PlayRoom() {
         setGameOver(result);
       }
       clearScore(game);
-      // console.log(result);
     }
   }, [game]);
 
@@ -58,6 +108,29 @@ export default function PlayRoom() {
       roomInit(id, user);
     }
   }, [user]);
+
+  const connectCall = (remotePeerId) => {
+    setCall(true);
+    console.log(remotePeerId);
+    var getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia;
+
+    getUserMedia({ video: true, audio: true }, async (mediaStream) => {
+      currentUserVideoRef.current.srcObject = mediaStream;
+      currentUserVideoRef.current.play();
+
+      const call = await peerInstance.current.call(remotePeerId, mediaStream);
+
+      callInstance.current = call;
+
+      call.on("stream", (remoteStream) => {
+        remoteVideoRef.current.srcObject = remoteStream;
+        remoteVideoRef.current.play();
+      });
+    });
+  };
 
   const boardOnChange = async (index) => {
     const tempBoard = [...game.board];
@@ -90,9 +163,11 @@ export default function PlayRoom() {
                     user.uid === game.player1.uid ? game.player1 : game.player2
                   }
                   number={user.uid === game.player1.uid ? 1 : 2}
+                  call={call}
+                  ref={currentUserVideoRef}
                 />
               </div>
-              <div className="my-4">
+              <div className="my-4 text-center">
                 <Board
                   board={game.board}
                   turn={game.turn}
@@ -138,6 +213,32 @@ export default function PlayRoom() {
                     </button>
                   )}
                 </div>
+
+                {game?.player1 && game?.player2 && !call && (
+                  <button
+                    onClick={() => {
+                      connectCall(
+                        user.uid === game.player1.uid
+                          ? game.player2.uid
+                          : game.player1.uid
+                      );
+                    }}
+                    className="px-3 py-1 mb-3 font-bold text-white rounded-full bg-gradient-to-r  from-[#008d8c] to-[#95dd7d]"
+                  >
+                    Start Video Call
+                  </button>
+                )}
+
+                {/* {game?.player1 && game?.player2 && call && (
+                  <button
+                    onClick={() => {
+                      disconnectCall();
+                    }}
+                    className="px-3 py-1 mb-3 font-bold text-white rounded-full bg-gradient-to-r  from-[#dc1c13] to-[#f1959b]"
+                  >
+                    Disconnect
+                  </button>
+                )} */}
               </div>
               <div className="self-start">
                 <PlayeCard
@@ -145,6 +246,8 @@ export default function PlayRoom() {
                     user.uid !== game.player1.uid ? game.player1 : game.player2
                   }
                   number={user.uid === game.player1.uid ? 2 : 1}
+                  call={call}
+                  ref={remoteVideoRef}
                 />
               </div>
             </div>

@@ -1,12 +1,18 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-export const PlayeCard = ({ user, number }) => {
+export const PlayeCard = forwardRef(({ user, number, call }, ref) => {
   return user ? (
     <div className="w-[300px] mx-14  flex flex-col justify-center items-center">
-      <img
-        className="h-[100px] rounded-full border-gray border-2"
-        src={user.photoURL}
-      />
+      {!call ? (
+        <img
+          className="h-[100px] rounded-full border-gray border-2"
+          src={user.photoURL}
+        />
+      ) : (
+        <div className="h-[100px] w-[100px] rounded-full border-2 border-black overflow-hidden">
+          <video className="mt-[10px]" ref={ref} />
+        </div>
+      )}
       <div
         className={`flex items-center justify-center text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-br ${
           number === 1
@@ -28,4 +34,4 @@ export const PlayeCard = ({ user, number }) => {
       </div>
     </div>
   );
-};
+});
