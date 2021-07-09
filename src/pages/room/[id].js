@@ -98,6 +98,7 @@ export default function PlayRoom() {
                   turn={game.turn}
                   player={user.uid === game.player1.uid ? true : false}
                   boardOnChange={boardOnChange}
+                  gameOver={gameOver}
                 />
                 <div className="text-center">
                   {gameOver === false ? (
