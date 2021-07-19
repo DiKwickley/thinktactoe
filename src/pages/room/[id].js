@@ -8,6 +8,7 @@ import { findWinner } from "./../../../utils/winner";
 import { auth } from "./../../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
+import Peer from "peerjs";
 
 import { Board } from "../../components/Board";
 import { PlayeCard } from "../../components/PlayerCard";
