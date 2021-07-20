@@ -8,7 +8,6 @@ import { findWinner } from "./../../../utils/winner";
 import { auth } from "./../../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
-import Peer from "peerjs";
 
 import { Board } from "../../components/Board";
 import { PlayeCard } from "../../components/PlayerCard";
@@ -37,51 +36,51 @@ export default function PlayRoom(props) {
 
   useEffect(() => {
     const fn = async () => {
-      const PeerJs = (await import("peerjs")).default;
+      const Peer = (await import("peerjs")).default;
+      const peer = new Peer(user.uid);
+      setPeer(peer);
     };
     fn();
   }, []);
 
   useEffect(() => {
-    if (user) {
-      const peer = new Peer(user.uid);
-      setPeer(peer);
+    if (peer)
+      if (user) {
+        peer.on("open", (id) => {
+          console.log({ id });
+        });
 
-      peer.on("open", (id) => {
-        console.log({ id });
-      });
+        peer.on("call", (call) => {
+          setCall(true);
+          var getUserMedia =
+            navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
 
-      peer.on("call", (call) => {
-        setCall(true);
-        var getUserMedia =
-          navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia;
+          getUserMedia({ video: true, audio: true }, async (mediaStream) => {
+            currentUserVideoRef.current.srcObject = await mediaStream;
+            currentUserVideoRef.current.play();
 
-        getUserMedia({ video: true, audio: true }, async (mediaStream) => {
-          currentUserVideoRef.current.srcObject = await mediaStream;
-          currentUserVideoRef.current.play();
+            call.on("close", () => {
+              console.log("Close fired");
+              setCall(false);
+              call.close();
+            });
 
-          call.on("close", () => {
-            console.log("Close fired");
-            setCall(false);
-            call.close();
-          });
+            call.on("error", (err) => {
+              console.log({ err });
+            });
 
-          call.on("error", (err) => {
-            console.log({ err });
-          });
-
-          call.answer(mediaStream);
-          call.on("stream", function (remoteStream) {
-            remoteVideoRef.current.srcObject = remoteStream;
-            remoteVideoRef.current.play();
+            call.answer(mediaStream);
+            call.on("stream", function (remoteStream) {
+              remoteVideoRef.current.srcObject = remoteStream;
+              remoteVideoRef.current.play();
+            });
           });
         });
-      });
-      peerInstance.current = peer;
-    }
-  }, [user]);
+        peerInstance.current = peer;
+      }
+  }, [user, peer]);
 
   useEffect(() => {
     if (value) {
