@@ -15,7 +15,7 @@ function createRoomID(length = 20) {
 }
 
 export default function Room() {
-  const [roomID, setRoomID] = useState(null);
+  const [roomID, setRoomID] = useState("");
 
   return (
     <Layout title={"Room"}>
